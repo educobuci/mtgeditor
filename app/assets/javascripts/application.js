@@ -15,5 +15,7 @@
 //= require turbolinks
 //= require_tree .
 (function(){
-  $("div").focus().grid();
+  $(".grid-list").each(function(){
+    $(this).grid();
+  });
 })();

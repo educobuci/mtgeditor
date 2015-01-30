@@ -1,7 +1,53 @@
-<div tabindex="0">
-  <ul>
-    <li>This is a card</li>
-    <li>This is another card</li>
-    <li>Yet another</li>
-  </ul>
+<div id="editor">
+  <div class="meta">
+    <dl>
+      <dt><label for="deck-name">Name</label></dt>
+      <dd><input name="name" id="deck-name"></dd>
+    </dl>
+    <button type="button" class="btn btn-default">Save</button>
+  </div>
+  <div class="search-panel">
+    <input class="search-text" placeholder="search">
+    <div class="grid-list" tabindex="1">
+      <ul>
+        <li>This is a card</li>
+        <li>This is another card</li>
+        <li>Yet another</li>
+      </ul>
+    </div>
+    <section class="grid-list" tabindex="2">
+      <ul>
+        <li>This is a card</li>
+        <li>This is another card</li>
+        <li>Yet another</li>
+      </ul>
+    </section>
+  </div>
+  <div class="card-panel">
+    <div class="card-image">
+      <!-- <img src="http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=235597&amp;type=card"> -->
+      <img src="">
+    </div>
+    <div class="card-text">
+      <textarea>
++1: Each player discards a card.
+-2: Target player sacrifices a creature.
+-6: Separate all permanents target player controls into two piles. That player sacrifices all permanents in the pile of his or her choice.
+      </textarea>
+    </div>
+    <div class="button-list">
+      <a class="add-main" href="#">Add to main</a>
+      <a class="add-side" href="#">Add to sideboard</a>
+      <a class="remove" href="#">Remove</a>
+      <a class="increment" href="#">Increment</a>
+      <a class="decrement" href="#">Decrement</a>
+    </div>
+    <div class="deck-panel">
+      <select class="cards" size="2">
+        <option>Liliana of the Veil</option>
+        <option>Liliana Vess</option>
+        <option>Liliana of the Dark Realms</option>
+      </select>
+    </div>
+  </div>
 </div>
