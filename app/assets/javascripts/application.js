@@ -20,21 +20,41 @@
   });
   cardsLoader.fetchJson(function(cards){
     console.log("Loading complete.");
-    $("input.search-text").keyup(function(){
-      var searchText = $(this).val().toLowerCase();
-      
-      var grid = $("div.grid-list ul").first();
-      grid.empty();
-      
-      if (searchText.length > 1) {  
-        var result = window.cardsArray.filter(function(card){
-          return card.name.toLowerCase().indexOf(searchText) > -1 || card.text.toLowerCase().indexOf(searchText) > -1;
-        });        
-        result.slice(0,100).forEach(function(card){
-          grid.append($("<li class=\"\">").text(card.name));
-        })
-      }      
+    var UP_KEY = 38;
+    var DOWN_KEY = 40;
+    
+    $('input.search-text').keydown(function(e){
+      if (event.which === UP_KEY || event.which === DOWN_KEY)
+      {
+        var grid = $(".grid-list").first();
+        event.preventDefault();
+        var fakeEvent = jQuery.Event("keydown");
+        fakeEvent.which = event.which;
+        grid.trigger(fakeEvent);
+      }
     });
+    
+    $("input.search-text").keyup(function(event){
+      var grid = $("div.grid-list ul").first();
+      
+      if (event.which !== UP_KEY && event.which !== DOWN_KEY)
+      {
+        var searchText = $(this).val().toLowerCase();
+    
+        var grid = $("div.grid-list ul").first();
+        grid.empty();
+    
+        if (searchText.length > 1) {  
+          var result = window.cardsArray.filter(function(card){
+            return card.name.toLowerCase().indexOf(searchText) > -1 || card.text.toLowerCase().indexOf(searchText) > -1;
+          });        
+          result.slice(0,100).forEach(function(card){
+            grid.append($("<li class=\"\">").text(card.name));
+          })
+        }
+      }
+    });
+    
   });
   window.render
 })();
