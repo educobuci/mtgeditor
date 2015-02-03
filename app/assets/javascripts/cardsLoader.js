@@ -1,7 +1,7 @@
 (function(){
   window.cardsLoader = {
     fetchJson: function(callback){
-      $.get("http://s3.amazonaws.com/mtgeditor/cards.json", function(data){
+      $.get("http://s3.amazonaws.com/mtgeditor/cards.gz.json", function(data){
         window.databse = data;
         window.cardsArray = databse.cockatrice_carddatabase.cards.card;
         callback();
