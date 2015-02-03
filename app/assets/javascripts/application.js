@@ -19,8 +19,24 @@
     $(this).grid();
   });
   cardsLoader.fetchJson(function(cards){
-    console.log("Loading complete.")
-  })
+    console.log("Loading complete.");
+    $("input.search-text").keyup(function(){
+      var searchText = $(this).val().toLowerCase();
+      
+      var grid = $("div.grid-list ul").first();
+      grid.empty();
+      
+      if (searchText.length > 1) {  
+        var result = window.cardsArray.filter(function(card){
+          return card.name.toLowerCase().indexOf(searchText) > -1 || card.text.toLowerCase().indexOf(searchText) > -1;
+        });        
+        result.slice(0,100).forEach(function(card){
+          grid.append($("<li class=\"\">").text(card.name));
+        })
+      }      
+    });
+  });
+  window.render
 })();
 
 function bench(clojure)

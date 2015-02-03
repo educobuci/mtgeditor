@@ -18,7 +18,7 @@
     }, options );
     
     // Grid item mouse over event
-    this.find(settings.tag).on("mouseover", function(event){
+    this.on("mouseover", settings.tag, function(event){
       if ($element.is(":focus") && plugin.isMouseDown === 1) {
         $element.find(SELECTED_SELECTOR).removeClass(SELECTED_CLASS);
         $(this).addClass(SELECTED_CLASS);
@@ -26,9 +26,10 @@
     });
     
     // Grid item mouse over event
-    this.find(settings.tag).on("mousedown", function(event){
-        $element.find(SELECTED_SELECTOR).removeClass(SELECTED_CLASS);
-        $(this).addClass(SELECTED_CLASS);
+    this.on("mousedown", settings.tag, function(event){
+      console.log("mouse down");
+      $element.find(SELECTED_SELECTOR).removeClass(SELECTED_CLASS);
+      $(this).addClass(SELECTED_CLASS);
     });
     
     // Grid mouse down state control
@@ -59,6 +60,8 @@
     // Grid up/down arrow keyboard events
     this.keydown(function( event ) {
       if (event.which === UP_KEY || event.which === DOWN_KEY && this.find(settings.tag).length > 0) {
+        event.preventDefault();
+        
         var selectedElement = null;
         
         if (this.find(SELECTED_SELECTOR).length === 0) {
