@@ -18,4 +18,14 @@
   $(".grid-list").each(function(){
     $(this).grid();
   });
+  cardsLoader.fetchJson(function(cards){
+    console.log("Loading complete.")
+  })
 })();
+
+function bench(clojure)
+{
+  var time = Date.now();
+  clojure();
+  console.info("Time elipsed(ms): ", Date.now() - time);
+}

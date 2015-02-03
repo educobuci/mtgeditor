@@ -46,7 +46,6 @@
     // Grid mouse up event
     this.mouseup(function(){
       plugin.isMouseDown = 0;
-      console.log("ronaldo", plugin.isMouseDown);
     });
     
     // Global mouse up event
