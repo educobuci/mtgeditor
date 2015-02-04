@@ -59,7 +59,6 @@
     
     // Grid up/down arrow keyboard events
     this.keydown(function( event, custom ) {
-      console.log("ronaaaaaado", custom, this.find(settings.tag))
       if (event.which === UP_KEY || event.which === DOWN_KEY && this.find(settings.tag).length > 0) {
         event.preventDefault();
         

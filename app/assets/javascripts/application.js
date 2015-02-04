@@ -18,8 +18,11 @@
   $(".grid-list").each(function(){
     $(this).grid();
   });
-  cardsLoader.fetchJson(function(cards){
+  cardsLoader.fetch(function(cards){
+    window.cardsArray = cards;
+    
     console.log("Loading complete.");
+    
     var UP_KEY = 38;
     var DOWN_KEY = 40;
     
@@ -46,7 +49,7 @@
     
         if (searchText.length > 1) {  
           var result = window.cardsArray.filter(function(card){
-            return card.name.toLowerCase().indexOf(searchText) > -1 || card.text.toLowerCase().indexOf(searchText) > -1;
+            return card.search.indexOf(searchText) > -1;
           });        
           result.slice(0,100).forEach(function(card){
             grid.append($("<li class=\"\">").text(card.name));
