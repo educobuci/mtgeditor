@@ -13,11 +13,16 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require jquery-ui.min
 //= require_tree .
+  
 (function(){
   $(".grid-list").each(function(){
     $(this).grid();
   });
+  
+  $("#testListView").listView();
+  
   cardsLoader.fetch(function(cards){
     window.cardsArray = cards;
     
