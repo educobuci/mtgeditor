@@ -12,7 +12,6 @@ $.widget( "custom.listView", {
       selectedSelector: ".selected"
     }, options );
     
-    //this.element.addClass("selected");
     this._bind();
   },
   
