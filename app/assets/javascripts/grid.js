@@ -54,7 +54,7 @@
       if(plugin.isMouseDown)
       {
         plugin.isMouseDown = 0;
-      }      
+      }
     });
     
     // Grid up/down arrow keyboard events

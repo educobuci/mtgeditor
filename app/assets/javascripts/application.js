@@ -16,11 +16,7 @@
 //= require jquery-ui.min
 //= require_tree .
   
-(function(){
-  $(".grid-list").each(function(){
-    $(this).grid();
-  });
-  
+(function(){  
   $("#testListView").listView();
   
   cardsLoader.fetch(function(cards){
