@@ -8,18 +8,29 @@
   
   window.EditorViewController.prototype.init = function(){
     this.searchListView = $("#search-listview").listView({
-      delegate: this
+      delegate: this,
+      rootSelector: "ul"
     });
     
     this.searchField = $("#search-field");
     
-    this.doBindings();
+    this.bind();
     
     window.CardsProvider.preFetch(function(){ console.log("Cards fetch done.")});
   };
   
-  window.EditorViewController.prototype.doBindings = function(){
+  window.EditorViewController.prototype.bind = function(){
     var self = this;
+    
+    this.searchField.keydown(function(event){
+      if (event.which === UP_KEY || event.which === DOWN_KEY)
+      {
+        event.preventDefault();
+        var virtualEvent = jQuery.Event("keydown");
+        virtualEvent.which = event.which;
+        $(this.searchListView).trigger(virtualEvent);
+      }
+    }.bind(this));
     
     this.searchField.keyup(function(event){
       if (event.which !== UP_KEY && event.which !== DOWN_KEY)
@@ -33,7 +44,6 @@
         }
       }
     });
-    
   };
   
   // Search ListView delegate methods
@@ -41,41 +51,10 @@
     return this.searchResultData.length;
   };
   
-  var editorViewController = new EditorViewController();
+  window.EditorViewController.prototype.cellForRowAtIndex = function(index){
+    var card = this.searchResultData[index];
+    return $("<li class=\"\">").text(card.name).get(0);
+  };
   
-  // cardsLoader.fetch(function(cards){
-  //   window.cardsArray = cards;
-  //
-  //   $('input.search-text').keydown(function(e){
-  //     if (event.which === UP_KEY || event.which === DOWN_KEY)
-  //     {
-  //       var grid = $(".grid-list").first();
-  //       event.preventDefault();
-  //       var fakeEvent = jQuery.Event("keydown");
-  //       fakeEvent.which = event.which;
-  //       grid.trigger(fakeEvent);
-  //     }
-  //   });
-  //
-  //   $("input.search-text").keyup(function(event){
-  //     var grid = $("div.grid-list ul").first();
-  //
-  //     if (event.which !== UP_KEY && event.which !== DOWN_KEY)
-  //     {
-  //       var searchText = $(this).val().toLowerCase();
-  //
-  //       var grid = $("div.grid-list ul").first();
-  //       grid.empty();
-  //
-  //       if (searchText.length > 1) {
-  //         var result = window.cardsArray.filter(function(card){
-  //           return card.search.indexOf(searchText) > -1;
-  //         });
-  //         result.slice(0,100).forEach(function(card){
-  //           grid.append($("<li class=\"\">").text(card.name));
-  //         })
-  //       }
-  //     }
-  //   });
-  // });
+  var editorViewController = new EditorViewController();
 }());

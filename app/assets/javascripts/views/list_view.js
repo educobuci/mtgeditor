@@ -88,7 +88,17 @@
     //Public methods
     reloadData: function(){
       var rowCount = this.options.delegate.numberOfRows();
-      console.log("number of row:", rowCount);
+      var rootElement = this.options.rootSelector ? this.element.find(this.options.rootSelector) : this.element;
+      
+      rootElement.empty();
+      
+      var fragment = document.createDocumentFragment();
+      
+      for (var i = 0; i < rowCount; i++) {
+        fragment.appendChild(this.options.delegate.cellForRowAtIndex(i));
+      }
+      
+      rootElement.append(fragment);
     }
   })
 }());
