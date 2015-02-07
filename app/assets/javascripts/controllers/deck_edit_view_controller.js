@@ -14,6 +14,8 @@
     
     this.searchField = $("#search-field");
     
+    this.cardImage = $("#card-image img");
+    
     this.bind();
     
     window.CardsProvider.preFetch(function(){ console.log("Cards fetch done.")});
@@ -54,6 +56,26 @@
   window.DeckEditViewController.prototype.cellForRowAtIndex = function(index){
     var card = this.searchResultData[index];
     return $("<li>").text(card.name).get(0);
+  };
+  
+  window.DeckEditViewController.prototype.didSelectRowAtIndex = function(index){
+    var card = this.searchResultData[index];
+    var muId = "";
+    if (card.set.length) {
+      var sets = card.set.sort(function(a,b){
+        return parseInt(a["-muId"],10) - parseInt(b["-muId"], 10);
+      });
+      console.log(sets);
+      muId = sets[sets.length - 1]["-muId"];
+    }
+    else
+    {
+      muId = card.set["-muId"];
+    }
+    
+    var imageUrl = card.set["-picURL"] || "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + muId +  "&type=card";
+    
+    this.cardImage.attr("src", imageUrl);
   };
   
   var deckEditViewController = new DeckEditViewController();

@@ -25,14 +25,14 @@
       this.element.on("mouseover", this.options.tag, function(event){
         if (plugin.element.is(":focus") && plugin._state.isMouseDown) {
           plugin.element.find(plugin.options.selectedSelector).removeClass(plugin.options.selectedClass);
-          $(this).addClass(plugin.options.selectedClass);
+          plugin.selectRow(this);
         }
       });
     
       // Grid item mouse over event
       this.element.on("mousedown", this.options.tag, function(event){
         plugin.element.find(plugin.options.selectedSelector).removeClass(plugin.options.selectedClass);
-        $(this).addClass(plugin.options.selectedClass);
+        plugin.selectRow(this);
       });
     
       // Grid mouse down event
@@ -63,7 +63,7 @@
           var selectedElement = null;
         
           if (this.find(plugin.options.selectedSelector).length === 0) {
-            selectedElement = this.find(plugin.options.tag)[0];
+            selectedElement = $(this.find(plugin.options.tag).get(0));
           }
           else if (event.which === DOWN_KEY) {
             selectedElement = this.find(plugin.options.selectedSelector).next();
@@ -73,16 +73,25 @@
           }
         
           if (selectedElement.length === 0) {
-            this.find(plugin.options.selectedSelector)
+            this.find(plugin.options.selectedSelector);
           }
           else
           {
             this.find(plugin.options.selectedSelector).removeClass(plugin.options.selectedClass);
           }
-        
-          $(selectedElement).addClass(plugin.options.selectedClass);
+          
+          if (selectedElement.length) {
+            plugin.selectRow(selectedElement.get(0));
+          }          
         }
       }.bind(this.element));
+    },
+    
+    selectRow: function(element){
+      $(element).addClass(this.options.selectedClass);
+      if (this.options.delegate.didSelectRowAtIndex) {
+        this.options.delegate.didSelectRowAtIndex($(element).index());
+      }
     },
     
     //Public methods
