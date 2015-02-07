@@ -2,11 +2,11 @@
   var UP_KEY = 38;
   var DOWN_KEY = 40;
   
-  window.EditorViewController = function constructor(){
+  window.DeckEditViewController = function constructor(){
     this.init();
   };
   
-  window.EditorViewController.prototype.init = function(){
+  window.DeckEditViewController.prototype.init = function(){
     this.searchListView = $("#search-listview").listView({
       delegate: this,
       rootSelector: "ul"
@@ -19,7 +19,7 @@
     window.CardsProvider.preFetch(function(){ console.log("Cards fetch done.")});
   };
   
-  window.EditorViewController.prototype.bind = function(){
+  window.DeckEditViewController.prototype.bind = function(){
     var self = this;
     
     this.searchField.keydown(function(event){
@@ -47,14 +47,14 @@
   };
   
   // Search ListView delegate methods
-  window.EditorViewController.prototype.numberOfRows = function(){
+  window.DeckEditViewController.prototype.numberOfRows = function(){
     return this.searchResultData.length;
   };
   
-  window.EditorViewController.prototype.cellForRowAtIndex = function(index){
+  window.DeckEditViewController.prototype.cellForRowAtIndex = function(index){
     var card = this.searchResultData[index];
-    return $("<li class=\"\">").text(card.name).get(0);
+    return $("<li>").text(card.name).get(0);
   };
   
-  var editorViewController = new EditorViewController();
+  var deckEditViewController = new DeckEditViewController();
 }());
