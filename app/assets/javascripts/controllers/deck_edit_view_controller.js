@@ -7,14 +7,23 @@
   };
   
   window.DeckEditViewController.prototype.init = function(){
+    var self = this;
+    
+    // Setup search list view
     this.searchListView = $("#search-listview").listView({
-      delegate: this,
+      delegate: {
+        numberOfRows: self.searchNumberOfRows.bind(self),
+        cellForRowAtIndex: self.searchCellForRowAtIndex.bind(self),
+        didSelectRowAtIndex: self.searchDidSelectRowAtIndex.bind(self),
+      },
       rootSelector: "ul"
     });
     
     this.searchField = $("#search-field");
-    
     this.cardImage = $("#card-image img");
+    this.cardText = $("#card-text textarea");
+    
+    this.searchField.focus();
     
     this.bind();
     
@@ -46,36 +55,28 @@
         }
       }
     });
+    
+    this.searchListView.on("dblclick", "li", function(event){
+      console.dir(this);
+    });
   };
   
   // Search ListView delegate methods
-  window.DeckEditViewController.prototype.numberOfRows = function(){
+  window.DeckEditViewController.prototype.searchNumberOfRows = function(){
     return this.searchResultData.length;
   };
   
-  window.DeckEditViewController.prototype.cellForRowAtIndex = function(index){
+  window.DeckEditViewController.prototype.searchCellForRowAtIndex = function(index){
     var card = this.searchResultData[index];
     return $("<li>").text(card.name).get(0);
   };
   
-  window.DeckEditViewController.prototype.didSelectRowAtIndex = function(index){
+  window.DeckEditViewController.prototype.searchDidSelectRowAtIndex = function(index){
     var card = this.searchResultData[index];
-    var muId = "";
-    if (card.set.length) {
-      var sets = card.set.sort(function(a,b){
-        return parseInt(a["-muId"],10) - parseInt(b["-muId"], 10);
-      });
-      console.log(sets);
-      muId = sets[sets.length - 1]["-muId"];
-    }
-    else
-    {
-      muId = card.set["-muId"];
-    }
-    
-    var imageUrl = card.set["-picURL"] || "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=" + muId +  "&type=card";
-    
+    var imageUrl = card.set["-picURL"] || "http://gatherer.wizards.com/Handlers/Image.ashx?name=" + card.name + "&type=card&.jpg";
+
     this.cardImage.attr("src", imageUrl);
+    this.cardText.val(card.text);
   };
   
   var deckEditViewController = new DeckEditViewController();

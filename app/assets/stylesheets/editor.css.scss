@@ -1,0 +1,34 @@
+#editor {
+  margin:15px 0;
+  .listview {
+    overflow:scroll;
+  }
+  .meta {
+    display:none;
+  }
+  ul {
+    padding:0;
+  }
+  li {
+    list-style:none;
+    padding:5px;
+  }
+  li.selected {
+    background:#EBEBEB;
+  }
+}
+.card-panel {
+  text-align:center;
+}
+#card-image
+{
+  img {
+    width:223px;
+    height:310px;
+  }
+}
+#card-text textarea {
+  width:80%;
+  height:150px;
+  margin-top:15px;
+}

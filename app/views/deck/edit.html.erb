@@ -1,49 +1,40 @@
-<div id="editor">
-  <div class="meta">
-    <dl>
-      <dt><label for="deck-name">Name</label></dt>
-      <dd><input name="name" id="deck-name"></dd>
-    </dl>
-    <button type="button" class="btn btn-default">Save</button>
-  </div>
-  <div class="search-panel">
-    <input id="search-field" placeholder="search">
-    <div id="search-listview" class="listview" tabindex="1">
-      <ul>
-      </ul>
+<div id="editor" class="container-fluid">
+  <div class="row">
+    <div class="meta">
+      <dl>
+        <dt><label for="deck-name">Name</label></dt>
+        <dd><input name="name" id="deck-name"></dd>
+      </dl>
+      <button type="button" class="btn btn-default">Save</button>
     </div>
-    <section id="test-listview" class="listview" tabindex="2">
-      <ul>
-        <li>This is a item</li>
-        <li>This is another item</li>
-        <li>Yet another</li>
-      </ul>
-    </section>
-  </div>
-  <div class="card-panel">
-    <div id="card-image">
-      <img src="">
+    <div class="search-panel col-md-4">
+      <input id="search-field" placeholder="search">
+      <div id="search-listview" class="listview" tabindex="1">
+        <ul>
+        </ul>
+      </div>
     </div>
-    <div class="card-text">
-      <textarea>
-+1: Each player discards a card.
--2: Target player sacrifices a creature.
--6: Separate all permanents target player controls into two piles. That player sacrifices all permanents in the pile of his or her choice.
-      </textarea>
+    <div class="card-panel col-md-4">
+      <div id="card-image">
+        <img src="">
+      </div>
+      <div id="card-text">
+        <textarea>
+        </textarea>
+      </div>
+      <div class="button-list">
+        <a class="add-main" href="#">Add to main</a>
+        <a class="add-side" href="#">Add to sideboard</a>
+        <a class="remove" href="#">Remove</a>
+        <a class="increment" href="#">Increment</a>
+        <a class="decrement" href="#">Decrement</a>
+      </div>
     </div>
-    <div class="button-list">
-      <a class="add-main" href="#">Add to main</a>
-      <a class="add-side" href="#">Add to sideboard</a>
-      <a class="remove" href="#">Remove</a>
-      <a class="increment" href="#">Increment</a>
-      <a class="decrement" href="#">Decrement</a>
-    </div>
-    <div class="deck-panel">
-      <select class="cards" size="2">
-        <option>Liliana of the Veil</option>
-        <option>Liliana Vess</option>
-        <option>Liliana of the Dark Realms</option>
-      </select>
+    <div class="panel-list col-md-4">
+      <div id="deck-listview" class="listview" tabindex="2">
+        <ul>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
