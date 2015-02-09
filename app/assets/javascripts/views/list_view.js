@@ -108,10 +108,6 @@
       }
       
       rootElement.append(fragment);
-      
-      if (rowCount) {
-        this.selectRow(this.element.find(this.options.tag).get(0));
-      }
     },
     
     indexForSelectedRow: function()

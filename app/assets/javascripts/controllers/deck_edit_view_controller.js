@@ -65,6 +65,10 @@
           window.CardsProvider.search(searchText, function(cards){
             self.searchResultData = cards;
             self.searchListView.listView("reloadData");
+            
+            var virtualEvent = jQuery.Event("keydown");
+            virtualEvent.which = DOWN_KEY;
+            $(self.searchListView).trigger(virtualEvent);
           }.bind(self));
         }
       }
