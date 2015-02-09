@@ -58,7 +58,7 @@
     }.bind(this));
     
     this.searchField.keyup(function(event){
-      if (event.which !== UP_KEY && event.which !== DOWN_KEY)
+      if (event.which !== UP_KEY && event.which !== DOWN_KEY && event.which !== RETURN_KEY)
       {
         var searchText = $(this).val().toLowerCase();
         if (searchText.length > 1) {
@@ -71,21 +71,38 @@
     });
     
     this.searchListView.on("dblclick", "li", function(event){
-      var resultCard = self.searchResultData[$(this).index()];
-      var deckCard = jQuery.extend(true, {}, resultCard);
-      self.deckData.push(deckCard);
-      self.deckListView.listView("reloadData");
+      self.addCardToDeck(self.searchResultData[$(this).index()]);
     });
     
     this.searchListView.keydown(function(event){
       if (event.which === RETURN_KEY) {
-        var resultCard = self.searchResultData[self.searchListView.listView("indexForSelectedRow")];
-        var deckCard = jQuery.extend(true, {}, resultCard);
-        self.deckData.push(deckCard);
-        self.deckListView.listView("reloadData");
+        self.addCardToDeck(self.searchResultData[self.searchListView.listView("indexForSelectedRow")]);
       }
     });
   };
+  
+  // Add a card to deck
+  window.DeckEditViewController.prototype.addCardToDeck = function(card)
+  {
+    if(card)
+    {
+      var filter = this.deckData.filter(function(c){
+        return c.name === card.name;
+      });
+    
+      if (filter.length) {
+        filter[0].count++;
+      }
+      else
+      {
+        var deckCard = jQuery.extend(true, {}, card);
+        deckCard.count = 1;
+        this.deckData.push(deckCard);
+      }
+    
+      this.deckListView.listView("reloadData");
+    }
+  }
   
   // Search list view delegate methods
   window.DeckEditViewController.prototype.searchNumberOfRows = function(){
