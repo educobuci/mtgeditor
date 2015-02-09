@@ -2,12 +2,14 @@
   margin:15px 0;
   .listview {
     overflow:scroll;
+    margin-top:15px;
   }
   .meta {
     display:none;
   }
   ul {
     padding:0;
+    margin:0;
   }
   li {
     list-style:none;

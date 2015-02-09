@@ -108,6 +108,12 @@
       }
       
       rootElement.append(fragment);
+    },
+    
+    indexForSelectedRow: function()
+    {
+      return this.element.find(this.options.selectedSelector).index();
     }
+    
   })
 }());
