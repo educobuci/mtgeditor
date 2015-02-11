@@ -3,6 +3,11 @@
   var DOWN_KEY = 40;
   var RETURN_KEY = 13;
   
+  var BACKSPACE_KEY = 8;
+  var DELETE_KEY = 46;
+  var MINUS_KEY = 189;
+  var PLUS_KEY = 187; // Also "=" key 
+  
   window.DeckEditViewController = function constructor(){
     this.init();
   };
@@ -81,6 +86,22 @@
     this.searchListView.keydown(function(event){
       if (event.which === RETURN_KEY) {
         self.addCardToDeck(self.searchResultData[self.searchListView.listView("indexForSelectedRow")]);
+      }
+    });
+    
+    this.deckListView.keydown(function(event){
+      var index = self.deckListView.listView("indexForSelectedRow");
+      if (index > -1) {
+        if(event.which === BACKSPACE_KEY || event.which === DELETE_KEY || event.which === MINUS_KEY){
+          self.deckData[index].count--;
+          if (!self.deckData[index].count) {
+            self.deckData.splice(index,1);
+          }
+          self.deckListView.listView("reloadData");
+        }
+        else if (event.which === PLUS_KEY) {
+          self.addCardToDeck(self.deckData[index]);
+        }
       }
     });
   };

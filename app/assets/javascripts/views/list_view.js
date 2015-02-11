@@ -87,9 +87,9 @@
       }.bind(this.element));
     },
     
-    selectRow: function(element){
+    selectRow: function(element, silence){
       $(element).addClass(this.options.selectedClass);
-      if (this.options.delegate.didSelectRowAtIndex) {
+      if (this.options.delegate.didSelectRowAtIndex && !silence) {
         this.options.delegate.didSelectRowAtIndex($(element).index());
       }
     },
@@ -98,6 +98,7 @@
     reloadData: function(){
       var rowCount = this.options.delegate.numberOfRows();
       var rootElement = this.options.rootSelector ? this.element.find(this.options.rootSelector) : this.element;
+      var selectedRow = this.indexForSelectedRow();
       
       rootElement.empty();
       
@@ -108,6 +109,10 @@
       }
       
       rootElement.append(fragment);
+      
+      if (selectedRow < rowCount) {
+        this.selectRow(rootElement.find(this.options.tag).get(selectedRow), true);
+      }
     },
     
     indexForSelectedRow: function()
