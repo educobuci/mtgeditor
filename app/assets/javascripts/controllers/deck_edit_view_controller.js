@@ -35,6 +35,7 @@
       rootSelector: "ul"
     });
     
+    this.searchResultData = [];
     this.deckData = [];
     
     this.searchField = $("#search-field");
@@ -68,12 +69,10 @@
         var searchText = $(this).val().toLowerCase();
         if (searchText.length > 1) {
           window.CardsProvider.search(searchText, function(cards){
-            self.searchResultData = cards;
-            self.searchListView.listView("reloadData");
-            
-            var virtualEvent = jQuery.Event("keydown");
-            virtualEvent.which = DOWN_KEY;
-            $(self.searchListView).trigger(virtualEvent);
+            if (self.searchResultData.length != cards.length) {
+              self.searchResultData = cards;
+              self.searchListView.listView("reloadData");
+            }
           }.bind(self));
         }
       }
@@ -84,7 +83,7 @@
     });
     
     this.searchListView.keydown(function(event){
-      if (event.which === RETURN_KEY) {
+      if (event.which === RETURN_KEY || event.which === PLUS_KEY) {
         self.addCardToDeck(self.searchResultData[self.searchListView.listView("indexForSelectedRow")]);
       }
     });
