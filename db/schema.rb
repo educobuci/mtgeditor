@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150211024920) do
+ActiveRecord::Schema.define(version: 20150212005701) do
 
   create_table "deck_cards", force: :cascade do |t|
     t.string   "name"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(version: 20150211024920) do
     t.integer  "deck_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean  "mainboard"
+    t.string   "set"
   end
 
   add_index "deck_cards", ["deck_id"], name: "index_deck_cards_on_deck_id"
