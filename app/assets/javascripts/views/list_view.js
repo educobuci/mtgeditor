@@ -98,7 +98,7 @@
     reloadData: function(){
       var rowCount = this.options.delegate.numberOfRows();
       var rootElement = this.options.rootSelector ? this.element.find(this.options.rootSelector) : this.element;
-      var selectedRow = this.indexForSelectedRow();
+      var selectedRow = Math.max(0, this.indexForSelectedRow());
       
       rootElement.empty();
       
