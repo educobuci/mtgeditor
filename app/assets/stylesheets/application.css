@@ -14,3 +14,7 @@
  *= require_tree .
  *= require_self
  */
+
+#home .jumbotron {
+  text-align:center;
+}
