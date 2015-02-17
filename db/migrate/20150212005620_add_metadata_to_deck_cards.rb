@@ -1,4 +1,4 @@
-class AddMainboardToDeckCards < ActiveRecord::Migration
+class AddMetadataToDeckCards < ActiveRecord::Migration
   def change
     add_column :deck_cards, :mainboard, :boolean
     add_column :deck_cards, :set, :string
