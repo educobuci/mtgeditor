@@ -5,7 +5,7 @@
     margin-top:15px;
   }
   .meta {
-    display:none;
+    height:50px;
   }
   ul {
     padding:0;
@@ -30,7 +30,6 @@
   }
 }
 #card-text textarea {
-  width:80%;
-  height:150px;
+  min-height:150px;
   margin-top:15px;
 }
