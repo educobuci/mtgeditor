@@ -15,6 +15,8 @@
   window.DeckEditViewController.prototype.init = function(){
     var self = this;
     
+    this.listItemTemplate = Handlebars.compile($("#list-item-template").html());
+    
     // Setup search list view
     this.searchListView = $("#search-listview").listView({
       delegate: {
@@ -150,7 +152,7 @@
   
   window.DeckEditViewController.prototype.deckCellForRowAtIndex = function(index){
     var card = this.deckData[index];
-    return $("<li>").text((card.count || 1) + "x " + card.name).get(0);
+    return $(this.listItemTemplate(card)).get(0);
   };
   
   window.DeckEditViewController.prototype.deckDidSelectRowAtIndex = function(index){

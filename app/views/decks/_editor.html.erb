@@ -1,3 +1,9 @@
+<!-- Handlebars templates -->
+<script id="list-item-template" type="text/x-handlebars-template">
+  <li>{{count}}x {{name}}</li>
+</script>
+  
+<!-- Page container -->
 <div id="editor" class="container-fluid">
   <div class="meta">
     <%= form_for @deck, html: { class: "form-inline" } do |f| %>

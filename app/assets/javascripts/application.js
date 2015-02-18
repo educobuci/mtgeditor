@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require jquery-ui.min
+//= require handlebars
 //= require_tree ./models/
 //= require_tree ./views/
 //= require_tree ./controllers/
