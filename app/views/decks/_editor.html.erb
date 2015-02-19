@@ -1,17 +1,21 @@
 <!-- Handlebars templates -->
 <script id="list-item-template" type="text/x-handlebars-template">
-  <li>{{count}}x {{name}}</li>
+  {{#if count}}
+    <li>{{count}}x {{name}}</li>
+  {{else}}
+    <li>{{name}}</li>
+  {{/if}}
 </script>
   
 <!-- Page container -->
 <div id="editor" class="container-fluid">
   <div class="meta">
-    <%= form_for @deck, html: { class: "form-inline" } do |f| %>
+    <%= form_for @deck, remote: true, html: { :'data-type' => "json", id: "deck-form", class: "form-inline" } do |f| %>
       <div class="form-group">
         <%= f.label :name, class: "sr-only" %>
         <%= f.text_field :name, class: "form-control", placeholder: "Deck name" %>
       </div>
-      <button type="button" class="btn btn-primary">Save</button>
+      <%= f.submit "Save", class: "btn btn-primary" %>
     <% end %>
   </div>
   <div class="row">

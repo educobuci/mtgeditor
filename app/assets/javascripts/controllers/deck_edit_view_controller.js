@@ -15,7 +15,9 @@
   window.DeckEditViewController.prototype.init = function(){
     var self = this;
     
-    this.listItemTemplate = Handlebars.compile($("#list-item-template").html());
+    if ($("#list-item-template").html()) {
+      this.listItemTemplate = Handlebars.compile($("#list-item-template").html());
+    }    
     
     // Setup search list view
     this.searchListView = $("#search-listview").listView({
@@ -37,12 +39,15 @@
       rootSelector: "ul"
     });
     
+    // Set list views data
     this.searchResultData = [];
     this.deckData = [];
     
+    // Create the element references
     this.searchField = $("#search-field");
     this.cardImage = $("#card-image img");
     this.cardText = $("#card-text textarea");
+    this.deckForm = $("#deck-form");
     
     this.searchField.focus();
     
@@ -105,6 +110,18 @@
         }
       }
     });
+    
+    this.deckForm.on("ajax:success", function(e, data, status, xhr)
+    {
+      if (document.URL.indexOf("/edit") < 0) {
+        history.pushState(null, null, "/decks/" + data.id + "/edit");
+        self.deckForm.attr("action", "/decks/" + data.id);
+        self.deckForm.append('<input type="hidden" name="_method" value="patch">');
+      }
+    }).on("ajax:error", function(e, data, status, xhr)
+    {
+      alert("error");
+    });
   };
   
   // Add a card to deck
@@ -137,7 +154,7 @@
   
   window.DeckEditViewController.prototype.searchCellForRowAtIndex = function(index){
     var card = this.searchResultData[index];
-    return $("<li>").text(card.name).get(0);
+    return $(this.listItemTemplate(card)).get(0);
   };
   
   window.DeckEditViewController.prototype.searchDidSelectRowAtIndex = function(index){
