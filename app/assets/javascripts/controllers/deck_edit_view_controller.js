@@ -17,7 +17,9 @@
     
     if ($("#list-item-template").html()) {
       this.listItemTemplate = Handlebars.compile($("#list-item-template").html());
-    }    
+    }
+    
+    this.inSync = false;
     
     // Setup search list view
     this.searchListView = $("#search-listview").listView({
@@ -49,11 +51,22 @@
     this.cardText = $("#card-text textarea");
     this.deckForm = $("#deck-form");
     
+    // Load current deck info
+    var regexp = new RegExp(/\d+/);
+    var result = regexp.exec(this.deckForm.attr("action"));
+    this.currentDeck = null;
+    if (result) {
+      this.currentDeck = parseInt(result, 10);
+    }    
+    
     this.searchField.focus();
     
     this.bind();
     
-    window.CardsProvider.preFetch(function(){ console.log("Cards fetch done.")});
+    window.CardsProvider.preFetch(function(){
+      console.log("Cards fetch done.");
+      this.loadDeck();
+    }.bind(this));
   };
   
   // Bind events
@@ -99,11 +112,14 @@
       var index = self.deckListView.listView("indexForSelectedRow");
       if (index > -1) {
         if(event.which === BACKSPACE_KEY || event.which === DELETE_KEY || event.which === MINUS_KEY){
-          self.deckData[index].count--;
+          var card = self.deckData[index];
+          card.count--;
+          
           if (!self.deckData[index].count) {
             self.deckData.splice(index,1);
           }
-          self.deckListView.listView("reloadData");
+          
+          self.syncCard(card);
         }
         else if (event.which === PLUS_KEY) {
           self.addCardToDeck(self.deckData[index]);
@@ -125,25 +141,57 @@
   };
   
   // Add a card to deck
-  window.DeckEditViewController.prototype.addCardToDeck = function(card)
-  {
-    if(card)
-    {
+  window.DeckEditViewController.prototype.addCardToDeck = function(card) {
+    if (card) {
+      var deckCard = card.muid ? card : this.convertToDeckCard(card);
       var filter = this.deckData.filter(function(c){
-        return c.name === card.name;
+        return c.name === deckCard.name;
       });
     
       if (filter.length) {
-        filter[0].count++;
+        deckCard = filter[0];
+        deckCard.count++;
       }
       else
-      {
-        var deckCard = jQuery.extend(true, {}, card);
-        deckCard.count = 1;
+      {        
         this.deckData.push(deckCard);
       }
-    
       this.deckListView.listView("reloadData");
+      this.syncCard(deckCard);
+    }
+  }
+  
+  window.DeckEditViewController.prototype.convertToDeckCard = function(card)
+  {
+    var cardSet = card.set.length ? card.set[card.set.length -1] : card.set;
+    return {
+      id: null,
+      name: card.name,
+      count: 1,
+      set: cardSet["#text"],
+      muid: cardSet["-muId"],
+      mainboard: true,
+      condition: 0,
+      foil: false
+    }
+  }
+  
+  window.DeckEditViewController.prototype.syncCard = function(cards){
+    var formAction = this.deckForm.attr("action");
+    var regexp = new RegExp(/\d+/);
+    var result = regexp.exec(formAction);
+    
+    if (!cards.length) {
+      cards = [cards];
+    }
+    
+    if (result) {
+      var deckId = result[0];
+      var formData = "cards=" + JSON.stringify(cards);
+      $.post(formAction + "/deck_cards", formData, function(data){
+        this.deckData = data;
+        this.deckListView.listView("reloadData");
+      }.bind(this));
     }
   }
   
@@ -178,12 +226,21 @@
   };
   
   // Show card details
-  window.DeckEditViewController.prototype.showCardDetails = function(card)
-  {
+  window.DeckEditViewController.prototype.showCardDetails = function(card) {
     var imageUrl = card.set["-picURL"] || "http://gatherer.wizards.com/Handlers/Image.ashx?name=" + card.name + "&type=card&.jpg";
 
     this.cardImage.attr("src", imageUrl);
     this.cardText.val(card.text);
+  }
+  
+  window.DeckEditViewController.prototype.loadDeck = function(callback) {
+    if (this.currentDeck) {
+      $.get(this.deckForm.attr("action") + "/deck_cards.json", function(data)
+      {
+        this.deckData = data;
+        this.deckListView.listView("reloadData");
+      }.bind(this));
+    }
   }
   
   var deckEditViewController = new DeckEditViewController();
