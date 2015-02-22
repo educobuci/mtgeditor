@@ -99,6 +99,7 @@
       var rowCount = this.options.delegate.numberOfRows();
       var rootElement = this.options.rootSelector ? this.element.find(this.options.rootSelector) : this.element;
       var selectedRow = Math.max(0, this.indexForSelectedRow());
+      var selectedHtml = $(rootElement.find(this.options.tag).get(selectedRow));
       
       rootElement.empty();
       
@@ -110,8 +111,11 @@
       
       rootElement.append(fragment);
       
+      var newSelectedHtml = $(rootElement.find(this.options.tag).get(selectedRow));
+      
       if (selectedRow < rowCount) {
-        this.selectRow(rootElement.find(this.options.tag).get(selectedRow), true);
+        var selectedChanged = (!selectedHtml || (selectedHtml.html() !== newSelectedHtml.html()));
+        this.selectRow(rootElement.find(this.options.tag).get(selectedRow), !selectedChanged);
       }
     },
     
