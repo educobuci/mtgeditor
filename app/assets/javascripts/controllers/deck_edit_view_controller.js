@@ -231,6 +231,7 @@
     var imageUrl = "http://gatherer.wizards.com/Handlers/Image.ashx?name=" + card.name + "&type=card&.jpg";
 
     this.cardImage.attr("src", imageUrl);
+    
     this.cardText.val(card.text);
   }
   
