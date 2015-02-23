@@ -231,8 +231,14 @@
     var imageUrl = "http://gatherer.wizards.com/Handlers/Image.ashx?name=" + card.name + "&type=card&.jpg";
 
     this.cardImage.attr("src", imageUrl);
-    
-    this.cardText.val(card.text);
+    if (!card.text) {
+      window.CardsProvider.findByMUID(card.muid, function(setCard){
+        this.cardText.val(setCard.text);
+      }.bind(this));
+    }
+    else {
+      this.cardText.val(card.text);
+    }
   }
   
   window.DeckEditViewController.prototype.loadDeck = function(callback) {
