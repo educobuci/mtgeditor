@@ -133,6 +133,7 @@
         history.pushState(null, null, "/decks/" + data.id + "/edit");
         self.deckForm.attr("action", "/decks/" + data.id);
         self.deckForm.append('<input type="hidden" name="_method" value="patch">');
+        self.syncCard(self.deckData);
       }
     }).on("ajax:error", function(e, data, status, xhr)
     {
@@ -227,7 +228,7 @@
   
   // Show card details
   window.DeckEditViewController.prototype.showCardDetails = function(card) {
-    var imageUrl = card.set["-picURL"] || "http://gatherer.wizards.com/Handlers/Image.ashx?name=" + card.name + "&type=card&.jpg";
+    var imageUrl = "http://gatherer.wizards.com/Handlers/Image.ashx?name=" + card.name + "&type=card&.jpg";
 
     this.cardImage.attr("src", imageUrl);
     this.cardText.val(card.text);
