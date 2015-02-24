@@ -89,8 +89,8 @@
     
     selectRow: function(element, silence){
       $(element).addClass(this.options.selectedClass);
-      if (this.options.delegate.didSelectRowAtIndex && !silence) {
-        this.options.delegate.didSelectRowAtIndex($(element).index());
+      if (this.options.delegate.didSelectRowAtIndexPath && !silence) {
+        this.options.delegate.didSelectRowAtIndexPath($(element).index());
       }
     },
     
@@ -106,7 +106,7 @@
       var fragment = document.createDocumentFragment();
       
       for (var i = 0; i < rowCount; i++) {
-        fragment.appendChild(this.options.delegate.cellForRowAtIndex(i));
+        fragment.appendChild(this.options.delegate.cellForRowAtIndexPath(i));
       }
       
       rootElement.append(fragment);

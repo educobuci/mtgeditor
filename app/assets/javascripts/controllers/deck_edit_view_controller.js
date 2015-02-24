@@ -25,8 +25,8 @@
     this.searchListView = $("#search-listview").listView({
       delegate: {
         numberOfRows: self.searchNumberOfRows.bind(self),
-        cellForRowAtIndex: self.searchCellForRowAtIndex.bind(self),
-        didSelectRowAtIndex: self.searchDidSelectRowAtIndex.bind(self),
+        cellForRowAtIndexPath: self.searchCellForRowAtIndexPath.bind(self),
+        didSelectRowAtIndexPath: self.searchDidSelectRowAtIndexPath.bind(self),
       },
       rootSelector: "ul"
     });
@@ -35,8 +35,8 @@
     this.deckListView = $("#deck-listview").listView({
       delegate: {
         numberOfRows: self.deckNumberOfRows.bind(self),
-        cellForRowAtIndex: self.deckCellForRowAtIndex.bind(self),
-        didSelectRowAtIndex: self.deckDidSelectRowAtIndex.bind(self),
+        cellForRowAtIndexPath: self.deckCellForRowAtIndexPath.bind(self),
+        didSelectRowAtIndexPath: self.deckDidSelectRowAtIndexPath.bind(self),
       },
       rootSelector: "ul"
     });
@@ -201,12 +201,12 @@
     return this.searchResultData.length;
   };
   
-  window.DeckEditViewController.prototype.searchCellForRowAtIndex = function(index){
+  window.DeckEditViewController.prototype.searchCellForRowAtIndexPath = function(index){
     var card = this.searchResultData[index];
     return $(this.listItemTemplate(card)).get(0);
   };
   
-  window.DeckEditViewController.prototype.searchDidSelectRowAtIndex = function(index){
+  window.DeckEditViewController.prototype.searchDidSelectRowAtIndexPath = function(index){
     var card = this.searchResultData[index];
     this.showCardDetails(card);
   };
@@ -216,12 +216,12 @@
     return this.deckData.length;
   };
   
-  window.DeckEditViewController.prototype.deckCellForRowAtIndex = function(index){
+  window.DeckEditViewController.prototype.deckCellForRowAtIndexPath = function(index){
     var card = this.deckData[index];
     return $(this.listItemTemplate(card)).get(0);
   };
   
-  window.DeckEditViewController.prototype.deckDidSelectRowAtIndex = function(index){
+  window.DeckEditViewController.prototype.deckDidSelectRowAtIndexPath = function(index){
     var card = this.deckData[index];
     this.showCardDetails(card);
   };
