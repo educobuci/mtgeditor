@@ -96,17 +96,22 @@
     
     //Public methods
     reloadData: function(){
-      var rowCount = this.options.delegate.numberOfRows();
+      var numberOfSections = this.options.delegate.numberOfSections();
       var rootElement = this.options.rootSelector ? this.element.find(this.options.rootSelector) : this.element;
       var selectedRow = Math.max(0, this.indexForSelectedRow());
       var selectedHtml = $(rootElement.find(this.options.tag).get(selectedRow));
-      
       rootElement.empty();
-      
       var fragment = document.createDocumentFragment();
       
-      for (var i = 0; i < rowCount; i++) {
-        fragment.appendChild(this.options.delegate.cellForRowAtIndexPath(i));
+      for (var i = 0; i < numberOfSections; i++) {
+        var rowCount = this.options.delegate.numberOfRowsInSection();
+        var sectionView = this.options.delegate.viewForHeaderInSection(i);
+        if (sectionView) {
+          fragment.appendChild(sectionView);
+        }
+        for (var j = 0; j < rowCount; j++) {
+          fragment.appendChild(this.options.delegate.cellForRowAtIndexPath(j));
+        }
       }
       
       rootElement.append(fragment);

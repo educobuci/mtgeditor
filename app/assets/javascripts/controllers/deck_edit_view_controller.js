@@ -24,9 +24,11 @@
     // Setup search list view
     this.searchListView = $("#search-listview").listView({
       delegate: {
-        numberOfRows: self.searchNumberOfRows.bind(self),
+        numberOfRowsInSection: self.searchNumberOfRows.bind(self),
         cellForRowAtIndexPath: self.searchCellForRowAtIndexPath.bind(self),
         didSelectRowAtIndexPath: self.searchDidSelectRowAtIndexPath.bind(self),
+        numberOfSections: self.searchNumberOfSections.bind(self),
+        viewForHeaderInSection: self.searchViewForHeaderInSection.bind(self)
       },
       rootSelector: "ul"
     });
@@ -34,9 +36,11 @@
     // Setup deck list view
     this.deckListView = $("#deck-listview").listView({
       delegate: {
-        numberOfRows: self.deckNumberOfRows.bind(self),
+        numberOfRowsInSection: self.deckNumberOfRows.bind(self),
         cellForRowAtIndexPath: self.deckCellForRowAtIndexPath.bind(self),
         didSelectRowAtIndexPath: self.deckDidSelectRowAtIndexPath.bind(self),
+        numberOfSections: self.deckNumberOfSections.bind(self),
+        viewForHeaderInSection: self.deckViewForHeaderInSection.bind(self)
       },
       rootSelector: "ul"
     });
@@ -211,6 +215,14 @@
     this.showCardDetails(card);
   };
   
+  window.DeckEditViewController.prototype.searchNumberOfSections = function(index){
+    return 1;
+  };
+  
+  window.DeckEditViewController.prototype.searchViewForHeaderInSection = function(index){
+    return null;
+  };
+  
   // Deck list view delegate methods
   window.DeckEditViewController.prototype.deckNumberOfRows = function(){
     return this.deckData.length;
@@ -224,6 +236,14 @@
   window.DeckEditViewController.prototype.deckDidSelectRowAtIndexPath = function(index){
     var card = this.deckData[index];
     this.showCardDetails(card);
+  };
+  
+  window.DeckEditViewController.prototype.deckNumberOfSections = function(index){
+    return 1;
+  };
+  
+  window.DeckEditViewController.prototype.deckViewForHeaderInSection = function(index){
+    return $("<li>").css({background: "gray", color: "white", padding: "2px 5px"}).text("Creatures").get(0);
   };
   
   // Show card details
