@@ -198,6 +198,9 @@
         this.deckListView.listView("reloadData");
       }.bind(this));
     }
+    else {
+      this.deckListView.listView("reloadData");
+    }
   }
   
   // Search list view delegate methods
