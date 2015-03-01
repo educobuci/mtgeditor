@@ -24,15 +24,19 @@
       // Grid item mouse over event
       this.element.on("mouseover", this.options.tag, function(event){
         if (plugin.element.is(":focus") && plugin._state.isMouseDown) {
-          plugin.element.find(plugin.options.selectedSelector).removeClass(plugin.options.selectedClass);
-          plugin.selectRow(this);
+          if (!plugin.isSectionElement(this)) {
+            plugin.element.find(plugin.options.selectedSelector).removeClass(plugin.options.selectedClass);
+            plugin.selectRow(this);
+          }
         }
       });
     
       // Grid item mouse over event
       this.element.on("mousedown", this.options.tag, function(event){
-        plugin.element.find(plugin.options.selectedSelector).removeClass(plugin.options.selectedClass);
-        plugin.selectRow(this);
+        if (!plugin.isSectionElement(this)) {
+          plugin.element.find(plugin.options.selectedSelector).removeClass(plugin.options.selectedClass);
+          plugin.selectRow(this);
+        }
       });
     
       // Grid mouse down event
@@ -67,9 +71,15 @@
           }
           else if (event.which === DOWN_KEY) {
             selectedElement = this.find(plugin.options.selectedSelector).next();
+            if(plugin.isSectionElement(selectedElement)) {
+              selectedElement = selectedElement.next();
+            }
           }
           else if (event.which === UP_KEY) {
             selectedElement = this.find(plugin.options.selectedSelector).prev();
+            if(plugin.isSectionElement(selectedElement)) {
+              selectedElement = selectedElement.prev();
+            }
           }
         
           if (selectedElement.length === 0) {
@@ -90,16 +100,16 @@
     selectRow: function(element, silence){
       $(element).addClass(this.options.selectedClass);
       if (this.options.delegate.didSelectRowAtIndexPath && !silence) {
-        
+      
         var absoluteIndex = $(element).index();
         var indexPath = this.indexPathOfAbsoluteIndex(absoluteIndex);
-        
+      
         console.log(absoluteIndex, JSON.stringify(indexPath));
-        
+      
         if (indexPath.section >= 0) {
           this.options.delegate.didSelectRowAtIndexPath(indexPath);
         }
-      }
+      }    
     },
     
     //Public methods
@@ -155,6 +165,12 @@
       var row = this.options.delegate.numberOfRowsInSection(section) - (offset - absoluteIndex) - 1;
       var indexPath = {section: section, row: row};
       return indexPath;
+    },
+    
+    isSectionElement: function(element){
+      var selectedIndexPath = this.indexPathOfAbsoluteIndex($(element).index());
+      var numberOfRowsInSection = this.options.delegate.numberOfRowsInSection(selectedIndexPath.section +1);
+      return selectedIndexPath.row === numberOfRowsInSection;
     }
   })
 }());
