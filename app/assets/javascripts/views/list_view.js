@@ -90,7 +90,15 @@
     selectRow: function(element, silence){
       $(element).addClass(this.options.selectedClass);
       if (this.options.delegate.didSelectRowAtIndexPath && !silence) {
-        this.options.delegate.didSelectRowAtIndexPath($(element).index());
+        
+        var absoluteIndex = $(element).index();
+        var indexPath = this.indexPathOfAbsoluteIndex(absoluteIndex);
+        
+        console.log(absoluteIndex, JSON.stringify(indexPath));
+        
+        if (indexPath.section >= 0) {
+          this.options.delegate.didSelectRowAtIndexPath(indexPath);
+        }
       }
     },
     
@@ -98,19 +106,19 @@
     reloadData: function(){
       var numberOfSections = this.options.delegate.numberOfSections();
       var rootElement = this.options.rootSelector ? this.element.find(this.options.rootSelector) : this.element;
-      var selectedRow = Math.max(0, this.indexForSelectedRow());
+      var selectedRow = Math.max(0, this.element.find(this.options.selectedSelector).index());
       var selectedHtml = $(rootElement.find(this.options.tag).get(selectedRow));
       rootElement.empty();
       var fragment = document.createDocumentFragment();
       
       for (var i = 0; i < numberOfSections; i++) {
-        var rowCount = this.options.delegate.numberOfRowsInSection();
+        var rowCount = this.options.delegate.numberOfRowsInSection(i);
         var sectionView = this.options.delegate.viewForHeaderInSection(i);
         if (sectionView) {
           fragment.appendChild(sectionView);
         }
         for (var j = 0; j < rowCount; j++) {
-          fragment.appendChild(this.options.delegate.cellForRowAtIndexPath(j));
+          fragment.appendChild(this.options.delegate.cellForRowAtIndexPath({row: j, section: i}));
         }
       }
       
@@ -124,10 +132,29 @@
       }
     },
     
-    indexForSelectedRow: function()
+    indexPathForSelectedRow: function()
     {
-      return this.element.find(this.options.selectedSelector).index();
-    }
+      return this.indexPathOfAbsoluteIndex(this.element.find(this.options.selectedSelector).index());
+    },
     
+    indexPathOfAbsoluteIndex: function(absoluteIndex)
+    {
+      var numberOfSections = this.options.delegate.numberOfSections();
+      var sectionsBefore = 0;
+      var offset = 0;
+      
+      for (var i = 0; i < numberOfSections && offset + i < absoluteIndex; i++, sectionsBefore++)
+      {
+        offset += this.options.delegate.numberOfRowsInSection(i);
+      }
+      
+      var section = sectionsBefore -1;
+      
+      offset = offset + section;
+      
+      var row = this.options.delegate.numberOfRowsInSection(section) - (offset - absoluteIndex) - 1;
+      var indexPath = {section: section, row: row};
+      return indexPath;
+    }
   })
 }());

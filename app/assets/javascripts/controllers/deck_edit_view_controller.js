@@ -108,13 +108,14 @@
     
     this.searchListView.keydown(function(event){
       if (event.which === RETURN_KEY || event.which === PLUS_KEY) {
-        self.addCardToDeck(self.searchResultData[self.searchListView.listView("indexForSelectedRow")]);
+        self.addCardToDeck(self.searchResultData[self.searchListView.listView("indexPathForSelectedRow").row]);
       }
     });
     
     this.deckListView.keydown(function(event){
-      var index = self.deckListView.listView("indexForSelectedRow");
-      if (index > -1) {
+      var indexPath = self.deckListView.listView("indexPathForSelectedRow");
+      if (indexPath.row > -1) {
+        var index = indexPath.section * 2 + indexPath.row;
         if(event.which === BACKSPACE_KEY || event.which === DELETE_KEY || event.which === MINUS_KEY){
           var card = self.deckData[index];
           card.count--;
@@ -208,13 +209,13 @@
     return this.searchResultData.length;
   };
   
-  window.DeckEditViewController.prototype.searchCellForRowAtIndexPath = function(index){
-    var card = this.searchResultData[index];
+  window.DeckEditViewController.prototype.searchCellForRowAtIndexPath = function(indexPath){
+    var card = this.searchResultData[indexPath.row];
     return $(this.listItemTemplate(card)).get(0);
   };
   
-  window.DeckEditViewController.prototype.searchDidSelectRowAtIndexPath = function(index){
-    var card = this.searchResultData[index];
+  window.DeckEditViewController.prototype.searchDidSelectRowAtIndexPath = function(indexPath){
+    var card = this.searchResultData[indexPath.row];
     this.showCardDetails(card);
   };
   
@@ -223,30 +224,30 @@
   };
   
   window.DeckEditViewController.prototype.searchViewForHeaderInSection = function(index){
-    return null;
+    return $("<li>").css({background: "gray", color: "white", padding: "2px 5px"}).text("Section #" + index).get(0);
   };
   
   // Deck list view delegate methods
   window.DeckEditViewController.prototype.deckNumberOfRows = function(){
-    return this.deckData.length;
+    return 2;
   };
   
-  window.DeckEditViewController.prototype.deckCellForRowAtIndexPath = function(index){
-    var card = this.deckData[index];
+  window.DeckEditViewController.prototype.deckCellForRowAtIndexPath = function(indexPath){
+    var card = this.deckData[indexPath.section * 2 + indexPath.row];
     return $(this.listItemTemplate(card)).get(0);
   };
   
-  window.DeckEditViewController.prototype.deckDidSelectRowAtIndexPath = function(index){
-    var card = this.deckData[index];
+  window.DeckEditViewController.prototype.deckDidSelectRowAtIndexPath = function(indexPath){
+    var card = this.deckData[indexPath.section * 2 + indexPath.row];
     this.showCardDetails(card);
   };
   
   window.DeckEditViewController.prototype.deckNumberOfSections = function(index){
-    return 1;
+    return Math.ceil(this.deckData.length / 2);
   };
   
   window.DeckEditViewController.prototype.deckViewForHeaderInSection = function(index){
-    return $("<li>").css({background: "gray", color: "white", padding: "2px 5px"}).text("Creatures").get(0);
+    return $("<li>").css({background: "gray", color: "white", padding: "2px 5px"}).text("Section #" + index).get(0);
   };
   
   // Show card details
