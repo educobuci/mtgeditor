@@ -104,8 +104,6 @@
         var absoluteIndex = $(element).index();
         var indexPath = this.indexPathOfAbsoluteIndex(absoluteIndex);
       
-        console.log(absoluteIndex, JSON.stringify(indexPath));
-      
         if (indexPath.section >= 0) {
           this.options.delegate.didSelectRowAtIndexPath(indexPath);
         }
@@ -162,15 +160,21 @@
       
       offset = offset + section;
       
-      var row = this.options.delegate.numberOfRowsInSection(section) - (offset - absoluteIndex) - 1;
+      var row = section >= 0 ? this.options.delegate.numberOfRowsInSection(section) - (offset - absoluteIndex) - 1 : 0;
       var indexPath = {section: section, row: row};
+      
       return indexPath;
     },
     
     isSectionElement: function(element){
       var selectedIndexPath = this.indexPathOfAbsoluteIndex($(element).index());
-      var numberOfRowsInSection = this.options.delegate.numberOfRowsInSection(selectedIndexPath.section +1);
-      return selectedIndexPath.row === numberOfRowsInSection;
+      if (selectedIndexPath.section < 0) {
+        return true;
+      }
+      else {
+        var numberOfRowsInSection = this.options.delegate.numberOfRowsInSection(selectedIndexPath.section);
+        return selectedIndexPath.row === numberOfRowsInSection; 
+      }
     }
   })
 }());

@@ -36,7 +36,7 @@
     // Setup deck list view
     this.deckListView = $("#deck-listview").listView({
       delegate: {
-        numberOfRowsInSection: self.deckNumberOfRows.bind(self),
+        numberOfRowsInSection: self.deckNumberOfRowsInSection.bind(self),
         cellForRowAtIndexPath: self.deckCellForRowAtIndexPath.bind(self),
         didSelectRowAtIndexPath: self.deckDidSelectRowAtIndexPath.bind(self),
         numberOfSections: self.deckNumberOfSections.bind(self),
@@ -227,27 +227,30 @@
     return $("<li>").css({background: "gray", color: "white", padding: "2px 5px"}).text("Section #" + index).get(0);
   };
   
+  //****************************************************************************
   // Deck list view delegate methods
-  window.DeckEditViewController.prototype.deckNumberOfRows = function(){
-    return 2;
+  //****************************************************************************
+  window.DeckEditViewController.prototype.deckNumberOfRowsInSection = function(index){
+    return this.deckData.categories[index].cards.length;
   };
   
   window.DeckEditViewController.prototype.deckCellForRowAtIndexPath = function(indexPath){
-    var card = this.deckData[indexPath.section * 2 + indexPath.row];
+    var card = this.deckData.categories[indexPath.section].cards[indexPath.row];
     return $(this.listItemTemplate(card)).get(0);
   };
   
   window.DeckEditViewController.prototype.deckDidSelectRowAtIndexPath = function(indexPath){
-    var card = this.deckData[indexPath.section * 2 + indexPath.row];
+    var card = this.deckData.categories[indexPath.section].cards[indexPath.row];
     this.showCardDetails(card);
   };
   
-  window.DeckEditViewController.prototype.deckNumberOfSections = function(index){
-    return Math.ceil(this.deckData.length / 2);
+  window.DeckEditViewController.prototype.deckNumberOfSections = function(){
+    return this.deckData.categories.length;
   };
   
   window.DeckEditViewController.prototype.deckViewForHeaderInSection = function(index){
-    return $("<li>").css({background: "gray", color: "white", padding: "2px 5px"}).text("Section #" + index).get(0);
+    var title = this.deckData.categories[index].name + " (" + this.deckData.categories[index].cards.length + ")";
+    return $("<li>").css({background: "gray", color: "white", padding: "2px 5px"}).text(title).get(0);
   };
   
   // Show card details
@@ -269,7 +272,29 @@
     if (this.currentDeck) {
       $.get(this.deckForm.attr("action") + "/deck_cards.json", function(data)
       {
-        this.deckData = data;
+        this.deckData = { categories: [] };
+        
+        data.forEach(function(c){
+          window.CardsProvider.findByMUID(c.muid, function(setCard){
+            c.setCard = setCard;
+            
+            var categoryName = c.setCard.type.split('—')[0].split('-')[0].trim();
+            var category = this.deckData.categories.find(function(cat){
+              return cat.name === categoryName;
+            });
+            
+            if (!category) {
+              category = {
+                name: categoryName,
+                cards: []
+              };
+              this.deckData.categories.push(category);
+            }
+            
+            category.cards.push(c);
+          }.bind(this));
+        }.bind(this));
+        
         this.deckListView.listView("reloadData");
       }.bind(this));
     }
