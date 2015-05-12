@@ -249,7 +249,10 @@
   };
   
   window.DeckEditViewController.prototype.deckViewForHeaderInSection = function(index){
-    var title = this.deckData.categories[index].name + " (" + this.deckData.categories[index].cards.length + ")";
+    sectionCards = this.deckData.categories[index].cards.reduce(function(total, card){
+      return total + card.count;
+    }, 0);
+    var title = this.deckData.categories[index].name + " (" + sectionCards + ")";
     return $("<li>").css({background: "gray", color: "white", padding: "2px 5px"}).text(title).get(0);
   };
   
