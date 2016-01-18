@@ -47,7 +47,7 @@
     
     // Set list views data
     this.searchResultData = [];
-    this.deckData = [];
+    this.deckData = { categories: [] };
     
     // Create the element references
     this.searchField = $("#search-field");
@@ -149,19 +149,33 @@
   // Add a card to deck
   window.DeckEditViewController.prototype.addCardToDeck = function(card) {
     if (card) {
+      var categoryName = card.type.split('—')[0].split('-')[0].trim();
+      var category = this.deckData.categories.find(function(cat){
+        return cat.name === categoryName;
+      });
+      
+      if (!category) {
+        category = {
+          name: categoryName,
+          cards: []
+        };
+        this.deckData.categories.push(category);
+      }
+      
       var deckCard = card.muid ? card : this.convertToDeckCard(card);
-      var filter = this.deckData.filter(function(c){
+      var filter = category.cards.filter(function(c){
         return c.name === deckCard.name;
       });
-    
+
       if (filter.length) {
         deckCard = filter[0];
         deckCard.count++;
       }
       else
-      {        
-        this.deckData.push(deckCard);
+      {
+        category.cards.push(deckCard);
       }
+
       this.deckListView.listView("reloadData");
       this.syncCard(deckCard);
     }
