@@ -115,19 +115,21 @@
     this.deckListView.keydown(function(event){
       var indexPath = self.deckListView.listView("indexPathForSelectedRow");
       if (indexPath.row > -1) {
-        var index = indexPath.section * 2 + indexPath.row;
         if(event.which === BACKSPACE_KEY || event.which === DELETE_KEY || event.which === MINUS_KEY){
-          var card = self.deckData[index];
+          var card = self.deckData.categories[indexPath.section].cards[indexPath.row];
           card.count--;
           
-          if (!self.deckData[index].count) {
-            self.deckData.splice(index,1);
+          if (!card.count) {
+            self.deckData.categories[indexPath.section].cards.splice(indexPath.row,1);
+          }
+          if (self.deckData.categories[indexPath.section].cards.length === 0) {
+            self.deckData.categories.splice(indexPath.section,1);
           }
           
           self.syncCard(card);
         }
         else if (event.which === PLUS_KEY) {
-          self.addCardToDeck(self.deckData[index]);
+          self.addCardToDeck(self.deckData.categories[indexPath.section].cards[indexPath.row]);
         }
       }
     });
@@ -192,7 +194,8 @@
       muid: cardSet["-muId"],
       mainboard: true,
       condition: 0,
-      foil: false
+      foil: false,
+      type:card.type
     }
   }
   
